@@ -6,6 +6,7 @@ import { CryptoData } from '@/types'
 import { get100Coins } from '@/lib/actions/order'
 import icons from '@/constants/icons'
 import OrderCard from '@/components/OrderCard'
+import Loader from '@/components/Loader'
 
 const HomeScreen = () => {
   const { data, setData } = useOrderStore();
@@ -61,7 +62,7 @@ const HomeScreen = () => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          <ActivityIndicator size={'large'} />
+            <Loader />
         )}
       </View>
       <View className='flex flex-row items-center bg-transparent absolute bottom-4 right-4'>

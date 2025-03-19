@@ -48,14 +48,18 @@ const CoinDetail = () => {
   if (!data) return <Loader />
   return (
     <View className='w-screen h-full  bg-bgDark  flex-1  pt-10'>
-      <TouchableOpacity onPress={() => router.back()} className='border border-bgPrimary mx-4 p-2 size-14 mb-2 rounded-full flex items-center justify-center'>
+      <TouchableOpacity onPress={() => {
+        router.push('/(root)/home')
+        setChart(null);
+        setData(null);
+      }} className='border border-bgPrimary mx-4 p-2 size-14 mb-2 rounded-full flex items-center justify-center'>
         <Image source={icons.back as ImageProps} className='size-8' tintColor={'#5ED5A8'} />
       </TouchableOpacity>
       <ScrollView className='px-5 flex-1 pt-5'>
         <View className='flex flex-col gap-5 pb-5'>
           <View className='flex flex-row justify-start gap-5 items-center'>
             <View className='border border-bgPrimary p-2 size-28 rounded-full'>
-              <Image src={data?.image} className='size-full' />
+              <Image src={data?.image} className='size-full rounded-full' />
             </View>
             <View className='flex flex-col gap-1'>
               <Text className='text-4xl text-white font-JakartaBold '>{data?.name}</Text>
