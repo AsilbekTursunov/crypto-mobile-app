@@ -1,8 +1,8 @@
-import { View, Text, RefreshControl, FlatList, Image, ImageProps, ActivityIndicator,  TouchableOpacity } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react' 
+import { View, Text, RefreshControl, Image, ImageProps, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useOrderStore } from '@/store'
-import { CryptoData } from '@/types'  
+import { CryptoData } from '@/types'
 import { get100Coins } from '@/lib/actions/order'
 import icons from '@/constants/icons'
 import OrderCard from '@/components/OrderCard'
@@ -11,7 +11,8 @@ import Loader from '@/components/Loader'
 const HomeScreen = () => {
   const { data, setData } = useOrderStore();
   const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(1)
+  const [open, setOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const getData = async () => {
     try {
@@ -23,7 +24,6 @@ const HomeScreen = () => {
   }
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    setPage(1)
     await getData()
     setRefreshing(false);
   }, []);
@@ -31,9 +31,11 @@ const HomeScreen = () => {
   useEffect(() => {
     getData()
   }, [])
-  // console.log('response', data[0]?.name)
+  const filterData = searchTerm && data?.filter(coin => coin.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
   return (
-    <View className='bg-mainDark h-full flex-1 relative'>
+    <ScrollView
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      className='bg-mainDark h-screen relative'>
       <View className='w-full  pb-5  px-4 flex flex-row bg-bgDark  shadow shadow-mainDark justify-between items-center'>
         <View className='flex flex-row items-center justify-between mt-16 w-full'>
           <View className='flex flex-row flex-wrap line-clamp-1 items-center gap-3'>
@@ -44,32 +46,34 @@ const HomeScreen = () => {
               Titans Crypto 👋
             </Text>
           </View>
-          <View className='flex flex-row gap-2 items-center'>
-            <TouchableOpacity>
+          <View className='flex flex-row gap-2 items-center '>
+            <TouchableOpacity onPress={() => setOpen(prev => !prev)}>
               <Image source={icons.search as ImageProps} className='size-6' />
             </TouchableOpacity>
           </View>
         </View>
       </View>
-      <View className='mx-4 flex-1'>
-        {data ? (
-          <FlatList
-            className='py-4'
-            data={data.slice(0, Number(`${page}0`))}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <OrderCard order={item} />}
-            showsVerticalScrollIndicator={false}
-          />
+      <View className={` flex-row items-center justify-between px-4 mt-5   w-full ${open ? 'flex' : 'hidden'}`}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TextInput
+            onChangeText={(value) => setSearchTerm(value)}
+            placeholder='Search crypto currencies'
+            className='border border-bgPrimary/10 w-full h-14 rounded-lg  px-4 placeholder:text-slate-700' />
+        </TouchableWithoutFeedback>
+      </View>
+      <View className='mx-4 flex flex-1 '>
+        {data && !refreshing ? (
+          <>
+            {(filterData ? filterData : data ).map(item => <OrderCard key={item.name} order={item} />)}
+          </>
         ) : (
+          <View className='flex-1 items-center justify-center   h-screen'>
             <Loader />
+          </View>
         )}
       </View>
-      <View className='flex flex-row items-center bg-transparent absolute bottom-4 right-4'>
-        <TouchableOpacity onPress={() => setPage(prev => prev + 1)} className='w-fit bg-bgPrimary px-4 py-2   transform rounded-2xl '><Text className='text-xl '>More</Text></TouchableOpacity>
-      </View>
       <StatusBar style='light' />
-    </View>
+    </ScrollView>
   )
 }
 

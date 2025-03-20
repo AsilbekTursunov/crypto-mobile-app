@@ -55,4 +55,19 @@ export const getPrices = (id: string, days: number, setError: (value: boolean) =
 
   return prices;
 };
+const apikey = "pub_41555da7d1fc0b27580ff4737791628569728";
+export const getNews = (value?: string) => {
+  const prices = fetch(`https://newsdata.io//api/1/news?apikey=${apikey}&q=${value ? value : "cryptocurrency"}`)
+    .then(res => res.json())
+    .then((response) => {
+      if (response) {
+        return response;
+      }
+    })
+    .catch((e) => {
+      console.log('error messge', e.message);
+    });
+
+  return prices;
+};
 

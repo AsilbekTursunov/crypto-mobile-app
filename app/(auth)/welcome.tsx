@@ -45,7 +45,7 @@ const Welcome = () => {
       </View>
 
       <TouchableOpacity
-        onPress={() => isLastSlide ? router.replace("/(root)/home") : swiperRef.current?.scrollBy(1)}
+        onPress={() => isLastSlide ? router.replace("/(tabs)/home") : swiperRef.current?.scrollBy(1)}
         className="w-fit mb-5 px-20 py-4 rounded-lg text-primary bg-bgPrimary"
       >
         <Text>{isLastSlide ? "Get Started" : "Next"}</Text>

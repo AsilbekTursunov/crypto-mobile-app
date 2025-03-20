@@ -1,4 +1,4 @@
-import { Chart, CoinDetails, CryptoData, IChart } from '@/types'
+import { Chart, CoinDetails, CryptoData, IChart, NewArticle } from '@/types'
 import { create } from 'zustand'
 
 interface IDataStore {
@@ -31,4 +31,13 @@ interface IChartStore {
 export const useChartStore = create<IChartStore>((set) => ({
   chart: null,
   setChart: (data: Chart[] | null) => set({ chart: data }),  //+
+}))
+interface INewsStore {
+  news: NewArticle[] | null,
+  setNews: (data: NewArticle[] | null) => void,  // update order data in the store.  //+
+}
+
+export const useNewsStore = create<INewsStore>((set) => ({
+  news: null,
+  setNews: (data: NewArticle[] | null) => set({ news: data }),  //+
 }))

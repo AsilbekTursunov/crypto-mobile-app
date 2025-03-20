@@ -1,4 +1,4 @@
-import { CoinDetails, CryptoData } from "@/types";
+import { NewArticle } from "@/types";
 
 export const settingCoinObject = (data: any, setCoin: (data: any) => void) => {
   setCoin({
@@ -11,5 +11,15 @@ export const settingCoinObject = (data: any, setCoin: (data: any) => void) => {
     total_volume: data.market_data.total_volume.usd,
     current_price: data.market_data.current_price.usd,
     market_cap: data.market_data.market_cap.usd,
+  });
+};
+export const settingnewbject = (data: NewArticle, setCoin: (data: any) => void) => {
+  setCoin({
+    id: data.article_id,
+    name: data.title,
+    image: data.image_url,
+    desc: data.description,
+    data: data.pubDate,
+    link: data.link,
   });
 };
