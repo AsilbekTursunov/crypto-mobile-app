@@ -20,3 +20,5 @@ export const banners = [
     bgImage: images.slideThree,
   }
 ];
+
+export const api = 'https://crypto-backend-wu40.onrender.com/api'

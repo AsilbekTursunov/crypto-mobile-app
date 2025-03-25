@@ -93,3 +93,8 @@ declare interface NewArticle {
   title: string;
   video_url?: string | null;
 };
+
+declare interface IUser {
+  email: string;
+  id: string;
+}

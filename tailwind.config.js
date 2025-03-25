@@ -16,7 +16,8 @@ module.exports = {
         mainDark: '#192027',
         textGray: '#777777', // text gray
         textRed: '#DD4B4B', // text red
-        textGreen: '#5ED5A8' // text green
+        textGreen: '#5ED5A8', // text green
+        textBlue: '#A7AFB7'
       },
       spacing: {
         "10px": "10px",

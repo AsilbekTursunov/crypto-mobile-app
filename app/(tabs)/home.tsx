@@ -2,6 +2,7 @@ import { View, Text, RefreshControl, Image, ImageProps, TouchableOpacity, TextIn
 import React, { useCallback, useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useOrderStore } from '@/store'
+import { getUserSrore } from '@/store/action'
 import { CryptoData } from '@/types'
 import { get100Coins } from '@/lib/actions/order'
 import icons from '@/constants/icons'
@@ -10,6 +11,7 @@ import Loader from '@/components/Loader'
 
 const HomeScreen = () => {
   const { data, setData } = useOrderStore();
+  const { userData } = getUserSrore()
   const [refreshing, setRefreshing] = useState(false);
   const [open, setOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -30,12 +32,10 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getData()
-  }, [])
+  }, []) 
   const filterData = searchTerm && data?.filter(coin => coin.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
   return (
-    <ScrollView
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      className='bg-mainDark h-screen relative'>
+    <>
       <View className='w-full  pb-5  px-4 flex flex-row bg-bgDark  shadow shadow-mainDark justify-between items-center'>
         <View className='flex flex-row items-center justify-between mt-16 w-full'>
           <View className='flex flex-row flex-wrap line-clamp-1 items-center gap-3'>
@@ -53,27 +53,31 @@ const HomeScreen = () => {
           </View>
         </View>
       </View>
-      <View className={` flex-row items-center justify-between px-4 mt-5   w-full ${open ? 'flex' : 'hidden'}`}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <TextInput
-            onChangeText={(value) => setSearchTerm(value)}
-            placeholder='Search crypto currencies'
-            className='border border-bgPrimary/10 w-full h-14 rounded-lg  px-4 placeholder:text-slate-700' />
-        </TouchableWithoutFeedback>
-      </View>
-      <View className='mx-4 flex flex-1 '>
-        {data && !refreshing ? (
-          <>
-            {(filterData ? filterData : data ).map(item => <OrderCard key={item.name} order={item} />)}
-          </>
-        ) : (
-          <View className='flex-1 items-center justify-center   h-screen'>
-            <Loader />
-          </View>
-        )}
-      </View>
-      <StatusBar style='light' />
-    </ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        className='bg-mainDark h-screen relative'>
+        <View className={` flex-row items-center justify-between px-4 mt-5   w-full ${open ? 'flex' : 'hidden'}`}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <TextInput
+              onChangeText={(value) => setSearchTerm(value)}
+              placeholder='Search crypto currencies'
+              className='border border-bgPrimary/10 w-full h-14 rounded-lg  px-4 placeholder:text-slate-700' />
+          </TouchableWithoutFeedback>
+        </View>
+        <View className='mx-4 flex flex-1 '>
+          {data && !refreshing ? (
+            <>
+              {(filterData ? filterData : data).map(item => <OrderCard key={item.name} order={item} />)}
+            </>
+          ) : (
+            <View className='flex-1 items-center justify-center   h-screen'>
+              <Loader />
+            </View>
+          )}
+        </View>
+        <StatusBar style='light' />
+      </ScrollView>
+    </>
   )
 }
 

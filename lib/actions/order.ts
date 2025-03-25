@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios' 
 
 export const get100Coins = async () => {
   const coins = await axios
@@ -70,4 +70,3 @@ export const getNews = (value?: string) => {
 
   return prices;
 };
-

@@ -1,7 +1,8 @@
 import { View, Text, ImageProps, Image } from 'react-native'
 import React from 'react'
-import { Tabs } from 'expo-router'
+import { Redirect, Tabs } from 'expo-router'
 import icons from '@/constants/icons';
+import { useAuth } from '@clerk/clerk-expo';
 
 
 const TabIcon = ({ color, focused, icon }: { color: string; focused: boolean; icon?: ImageProps }) => (
@@ -10,7 +11,7 @@ const TabIcon = ({ color, focused, icon }: { color: string; focused: boolean; ic
   </View>
 )
 
-const RootLaytout = () => {
+const RootLaytout = () => { 
   return (
     <Tabs
       screenOptions={{
@@ -39,7 +40,7 @@ const RootLaytout = () => {
           title:'News',
           headerShown: false,
           tabBarIcon: ({ color, focused }) => <TabIcon color={color} focused={focused} icon={icons.news as ImageProps} />
-        }} />
+        }} /> 
     </Tabs>
   )
 }

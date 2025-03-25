@@ -1,6 +1,19 @@
-import { Chart, CoinDetails, CryptoData, IChart, NewArticle } from '@/types'
+import { Chart, CoinDetails, CryptoData, IChart, IUser, NewArticle } from '@/types'
 import { create } from 'zustand'
 
+
+// user store
+interface IUserStore {
+  userData: IUser | null,
+  setUser: (user: IUser | null) => void,  // update user data in the store.  //+
+}
+
+export const userStore = create<IUserStore>((set) => ({
+  userData: null,
+  setUser: (user: IUser | null) => set({ userData: user }),
+}))
+
+// chart store
 interface IDataStore {
   data: CoinDetails | null,
   setData: (user: CoinDetails | null) => void,  // update user data in the store.  //+
@@ -32,6 +45,8 @@ export const useChartStore = create<IChartStore>((set) => ({
   chart: null,
   setChart: (data: Chart[] | null) => set({ chart: data }),  //+
 }))
+
+// news store
 interface INewsStore {
   news: NewArticle[] | null,
   setNews: (data: NewArticle[] | null) => void,  // update order data in the store.  //+
