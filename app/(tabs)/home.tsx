@@ -7,7 +7,7 @@ import { CryptoData } from '@/types'
 import { get100Coins } from '@/lib/actions/order'
 import icons from '@/constants/icons'
 import OrderCard from '@/components/OrderCard'
-import Loader from '@/components/Loader'
+import Loader from '@/components/Loader' 
 
 const HomeScreen = () => {
   const { data, setData } = useOrderStore();
@@ -15,7 +15,8 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [open, setOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-
+  const [image, setImage] = useState('')
+  const formData = new FormData();
   const getData = async () => {
     try {
       const response = await get100Coins()
@@ -32,7 +33,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getData()
-  }, []) 
+  }, [])
   const filterData = searchTerm && data?.filter(coin => coin.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
   return (
     <>
@@ -47,7 +48,7 @@ const HomeScreen = () => {
             </Text>
           </View>
           <View className='flex flex-row gap-2 items-center '>
-            <TouchableOpacity onPress={() => setOpen(prev => !prev)}>
+            <TouchableOpacity onPress={() => setOpen(!open)}>
               <Image source={icons.search as ImageProps} className='size-6' />
             </TouchableOpacity>
           </View>

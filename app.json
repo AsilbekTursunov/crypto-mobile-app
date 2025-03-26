@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": {
+    "ios": { 
       "supportsTablet": true
     },
     "splash": {
@@ -17,6 +17,7 @@
       "backgroundColor": "#1B232A"
     },
     "android": {
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#1B232A"
@@ -35,11 +36,23 @@
         }
       ],
       [
+        "expo-document-picker",
+        {
+        "iCloudContainerEnvironment": "Production"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png", 
           "resizeMode": "contain",
           "backgroundColor": "#1B232A"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
     ],
