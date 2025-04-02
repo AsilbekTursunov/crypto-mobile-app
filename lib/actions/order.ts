@@ -1,4 +1,14 @@
-import axios from 'axios' 
+import axios from 'axios'
+
+export const fetchCoins = async ({ pageParam = 1 }) => {
+  const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${pageParam}`, {
+    method: 'GET',
+    headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-G7Uhr5kaudo3ZCw8LWEit8Mj' }
+  }
+  );
+  return response.json();
+};
+//  key 8131d9ef-1369-4348-8588-5f68e1e09999
 
 export const get100Coins = async () => {
   const coins = await axios
@@ -17,18 +27,11 @@ export const get100Coins = async () => {
 };
 
 export const getCoinData = async (id: string) => {
-  const coin = await axios
-    .get(`https://api.coingecko.com/api/v3/coins/${id}`)
-    .then((response) => {
-      if (response.data) {
-        return response.data;
-      }
-    })
-    .catch((e) => {
-      console.log(e.message);
-    });
-
-  return coin;
+  const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`, {
+    method: 'GET',
+    headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-G7Uhr5kaudo3ZCw8LWEit8Mj' }
+  });
+  return response.json();
 };
 
 

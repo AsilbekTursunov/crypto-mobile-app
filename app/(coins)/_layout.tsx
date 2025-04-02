@@ -1,12 +1,16 @@
 import React from 'react'
-import { Stack } from 'expo-router'
+// import { Stack } from 'expo-router'
+import CoinDetail from './[id]';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-const RootLayout = () => {
+const Drawer = createDrawerNavigator();
+
+const CoinsStackNavigater = () => {
   return (
-    <Stack>
-      <Stack.Screen name='[id]' options={{ headerShown: false }} />  
-    </Stack>
+    <Drawer.Navigator id={undefined}>
+      <Drawer.Screen name='[id]' options={{ headerShown: false }} component={CoinDetail} />
+    </Drawer.Navigator>
   )
 }
 
-export default RootLayout
+export default CoinsStackNavigater

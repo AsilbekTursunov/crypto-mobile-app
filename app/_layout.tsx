@@ -1,5 +1,5 @@
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+// import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -8,9 +8,11 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
-import { LogBox } from 'react-native';
+import { persistQueryClient } from "@tanstack/react-query-persist-client";
+import { Stack } from 'expo-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Loglar faqat xatolarni ko'rsatadi (warning chiqmaydi)
 configureReanimatedLogger({
   level: ReanimatedLogLevel.error,
   strict: false, // Strict mode'ni o‘chiradi
@@ -19,6 +21,23 @@ configureReanimatedLogger({
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient();
+
+persistQueryClient({
+  queryClient,
+  persister: {
+    persistClient: async (persistedClient) => {
+      await AsyncStorage.setItem('persistedClient', JSON.stringify(persistedClient));
+    },
+    restoreClient: async () => {
+      const persistedClient = await AsyncStorage.getItem('persistedClient');
+      return persistedClient ? JSON.parse(persistedClient) : undefined;
+    },
+    removeClient: async () => {
+      await AsyncStorage.removeItem('persistedClient');
+    },
+  },
+});
 
 export default function RootLayout() {
 
@@ -43,12 +62,15 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(coins)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+    <QueryClientProvider client={queryClient}>
+      <Stack initialRouteName='index'>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(coins)" options={{ headerShown: false }} />
+        <Stack.Screen name="profile" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </QueryClientProvider>
   );
 }

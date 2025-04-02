@@ -1,12 +1,10 @@
-import { View, Text, ImageBackground, ImageProps } from 'react-native'
+import { ImageBackground, ImageProps } from 'react-native'
 import React from 'react'
-import { Chart } from '@/types'
 import { useChartStore } from '@/store'
-import { CandlestickChart, LineChart, useCandleData } from 'react-native-wagmi-charts'
+import { CandlestickChart } from 'react-native-wagmi-charts'
 import Loader from './Loader'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import images from '@/constants/images'
-
 const CurrencyChart = () => {
   const { chart } = useChartStore()
   if (!chart) return <Loader />

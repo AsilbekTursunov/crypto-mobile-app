@@ -3,15 +3,19 @@ import { create } from 'zustand'
 
 
 // user store
-interface IUserStore {
-  userData: IUser | null,
-  setUser: (user: IUser | null) => void,  // update user data in the store.  //+
+
+interface IUserStore { 
+  user: IUser | null
+  setUserData: (user: IUser | null) => void
 }
 
-export const userStore = create<IUserStore>((set) => ({
-  userData: null,
-  setUser: (user: IUser | null) => set({ userData: user }),
+export const useUserStore = create<IUserStore>((set) => ({
+  user: null,
+  setUserData: (user) => set({ user, })
 }))
+
+
+
 
 // chart store
 interface IDataStore {

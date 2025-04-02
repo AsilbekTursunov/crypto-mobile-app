@@ -6,30 +6,27 @@ import { NewArticle } from '@/types'
 import { getNews } from '@/lib/actions/order' 
 import Loader from '@/components/Loader' 
 import NewsCard from '@/components/NewsCard'
+import { useQuery } from '@tanstack/react-query'
 
-const NewsScreen = () => {
-  const { news, setNews } = useNewsStore();
-  const [refreshing, setRefreshing] = useState(false);
+const NewsScreen = () => { 
+  const [refreshing, setRefreshing] = useState(false); 
 
-  const getData = async () => {
-    try {
-      const response = await getNews()
-      setNews(response.results as NewArticle[]) 
-    } catch (error) {
-      console.error('Error getting news', error)
-    }
-  }
+  const { data: news, isLoading, error: coinError, refetch } = useQuery({
+    queryKey: ['news'],
+    queryFn: ({ queryKey }) => getNews(),
+    staleTime: 1000 * 60 * 5, // 5 daqiqa davomida eski ma’lumotni ishlatadi 
+  })
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await getData()
+    await refetch()
     setRefreshing(false);
   }, []);
 
   useEffect(() => {
-    getData()
+    refetch()
   }, [])
-  if (!news) return <Loader /> 
+  if (!news) return <Loader />  
   return (
     <ScrollView
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -41,8 +38,8 @@ const NewsScreen = () => {
         <View className='mx-4 flex flex-1 flex-col '>
           {news && !refreshing ? (
             <>
-              {news.map(item => <NewsCard key={item.article_id} data={item}/>)}
-          </>
+              {news?.results.map((item: NewArticle) => <NewsCard key={item.article_id} data={item} />)}
+            </>
           ) : (
             <View className='flex-1 items-center justify-center   h-screen'>
               <Loader />

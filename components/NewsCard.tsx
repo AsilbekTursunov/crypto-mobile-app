@@ -2,8 +2,6 @@ import { View, Text, Image, Linking, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { NewArticle } from '@/types'
 import moment from 'moment'
-import { router } from 'expo-router'
-
 const NewsCard = ({ data }: { data: NewArticle }) => {
 
   const openWebsite = (url: string) => {

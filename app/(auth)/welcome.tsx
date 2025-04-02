@@ -12,7 +12,7 @@ const Welcome = () => {
   
   return (
     <ImageBackground
-      className="flex h-full w-full  flex-col items-center justify-between "
+      className="flex h-screen w-full flex-1  flex-col items-center justify-center "
       source={images.background as ImageProps}
       resizeMode='cover'
     >
@@ -45,12 +45,12 @@ const Welcome = () => {
       </View>
 
       <TouchableOpacity
-        onPress={() => isLastSlide ? router.push("/(tabs)/home") : swiperRef.current?.scrollBy(1)}
-        className="w-fit mb-5 px-20 py-4 rounded-lg text-primary bg-bgPrimary"
+        onPress={() => isLastSlide ? router.push("/(auth)/authorization") : swiperRef.current?.scrollBy(1)}
+        className="w-fit mb-10 px-20 py-4 rounded-lg text-primary bg-bgPrimary"
       >
         <Text>{isLastSlide ? "Get Started" : "Next"}</Text>
-      </TouchableOpacity>
-      <StatusBar barStyle={'light-content'} />
+      </TouchableOpacity> 
+      <StatusBar barStyle="light-content" hidden />
     </ImageBackground>
   );
 };

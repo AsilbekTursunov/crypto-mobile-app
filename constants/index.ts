@@ -21,4 +21,4 @@ export const banners = [
   }
 ];
 
-export const api = 'https://crypto-backend-wu40.onrender.com/api'
+export const API = 'https://crypto-backend-0s71.onrender.com/api/auth'

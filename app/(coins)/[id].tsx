@@ -5,10 +5,12 @@ import { useChartStore, userDataStore } from '@/store'
 import { getCoinData, getPrices } from '@/lib/actions/order'
 import { settingCoinObject } from '@/lib/hooks'
 import icons from '@/constants/icons'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import CurrencyChart from '@/components/CurrenyChart'
 import Loader from '@/components/Loader'
 import { RefreshControl } from 'react-native-gesture-handler'
+import { useQuery } from '@tanstack/react-query'
+import { convertFixed, convertLocal } from '@/lib/utils/token'
 
 const CoinDetail = () => {
   const { id } = useLocalSearchParams()
@@ -19,53 +21,50 @@ const CoinDetail = () => {
   const [days, setDays] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      getData();
-    }
-  }, [id]);
 
-  const getData = useCallback(async () => {
-    try {
-      setLoading(true);
 
-      const coinData = await getCoinData(id.toString());
+  const { data: coin, isLoading, error: coinError, refetch } = useQuery({
+    queryKey: ['coin'],
+    queryFn: async () => {
+      const coinData = await getCoinData(id.toString())
       if (coinData) {
         settingCoinObject(coinData, setData);
-      }
-
+      } 
       const prices = await getPrices(id.toString(), days, setError);
       setChart(prices);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [days]);
+      return coinData;
+    },
+    staleTime: 1000 * 60 * 5, // 5 daqiqa davomida eski ma’lumotni ishlatadi 
+  })
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await getData()
+    await refetch()
     setRefreshing(false);
   }, []);
 
-  useEffect(() => {
-    getData();
-  }, [getData]);
 
-  if (!data && refreshing) return <Loader />
+
+  useEffect(() => {
+    if (id) {
+      refetch();
+    }
+  }, [id]); 
+
+  if (!coin && refreshing) return <Loader />
   return (
-    <>
-      {data && (
+    <> 
+      {coin.id && (
         <View className='w-screen h-screen bg-mainDark  flex-1  pt-14'>
-          <TouchableOpacity onPress={() => {
-            router.push('/(tabs)/home')
+          <Link className='border border-bgPrimary mx-4  p-2 size-14 mb-2 rounded-full flex items-center justify-center' onPress={() => {
             setChart(null);
-            setData(null);
-          }} className='border border-bgPrimary mx-4  p-2 size-14 mb-2 rounded-full flex items-center justify-center'>
-            <Image source={icons.back as ImageProps} className='size-8' tintColor={'#5ED5A8'} />
-          </TouchableOpacity>
-          <ScrollView className='px-5 flex-1 pt-5 bg-mainDark'>
+          }} href={'/(tabs)/home'}><Image source={icons.back as ImageProps} className='size-8' tintColor={'#5ED5A8'} /></Link>
+          <ScrollView
+            className='px-5 flex-1 pt-5 bg-mainDark'
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             <View className='flex flex-col gap-5 pb-5'>
               <View className='flex flex-row justify-start gap-5 items-center'>
                 <View className='border border-bgPrimary p-2 size-28 rounded-full'>
@@ -84,17 +83,17 @@ const CoinDetail = () => {
                   </View>
                 </View>
                 <View className='flex flex-col gap-2 mt-10 items-end'>
-                  <Text className='text-lg text-white font-JakartaBold'>${data?.current_price.toFixed(2)}</Text>
-                  <Text className={`text-xs  flex  font-bold ${data.price_change_percentage_24h >= 0 ? 'text-textGreen' : 'text-textRed'}`}>{data?.price_change_percentage_24h.toFixed(2)}%</Text>
+                  <Text className='text-lg text-white font-JakartaBold'>${convertFixed(data?.current_price)}</Text>
+                  <Text className={`text-xs  flex  font-bold ${data.price_change_percentage_24h >= 0 ? 'text-textGreen' : 'text-textRed'}`}>{convertFixed(data?.price_change_percentage_24h)}%</Text>
                 </View>
               </View>
               <View className='flex flex-row items-center justify-between'>
                 <Text className='text-sm text-white font-JakartaLight'>Total</Text>
-                <Text className='text-sm text-white font-JakartaLight'>${data?.total_volume.toLocaleString()}</Text>
+                <Text className='text-sm text-white font-JakartaLight'>${convertLocal(data?.total_volume)}</Text>
               </View>
               <View className='flex flex-row items-center justify-between'>
                 <Text className='text-sm text-white font-JakartaLight'>Market Cup</Text>
-                <Text className='text-sm text-white font-JakartaLight'>${data?.market_cap.toLocaleString()}</Text>
+                <Text className='text-sm text-white font-JakartaLight'>${convertLocal(data?.market_cap)}</Text>
               </View>
               <View className='flex flex-row rounded-lg bg-mainDark p-2 gap-2'>
                 <TouchableOpacity onPress={() => setDays(1)} className={`flex-1  rounded-lg  `}>
