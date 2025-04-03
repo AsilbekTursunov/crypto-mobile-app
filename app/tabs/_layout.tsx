@@ -1,11 +1,8 @@
 import { View, Text, ImageProps, Image } from 'react-native'
 import React from 'react'
 import icons from '@/constants/icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './home';
-import NewsScreen from './news';
-
-const Tab = createBottomTabNavigator();
+import { Tabs } from 'expo-router';
+ 
 const TabIcon = ({ color, focused, icon }: { color: string; focused: boolean; icon?: ImageProps }) => (
   <View style={{ marginBottom: 10 }}>
     <Image source={icon} alt='tab-icon' className='size-8' tintColor={focused ? "#5ED5A8" : "#3E4750"} />
@@ -14,7 +11,7 @@ const TabIcon = ({ color, focused, icon }: { color: string; focused: boolean; ic
 
 const TabsStackNavigater = () => {
   return (
-    <Tab.Navigator
+    <Tabs
       id={undefined}
       screenOptions={{
         tabBarActiveTintColor: "#5ED5A8",
@@ -30,24 +27,22 @@ const TabsStackNavigater = () => {
         },
       }}
     >
-      <Tab.Screen
-        name='home'
-        component={HomeScreen}
+      <Tabs.Screen
+        name='home' 
         options={{
           title: 'Home',
           headerShown: false,
           tabBarIcon: ({ color, focused }) => <TabIcon color={color} focused={focused} icon={icons.home as ImageProps} />
         }}
       />
-      <Tab.Screen
-        name='news'
-        component={NewsScreen}
+      <Tabs.Screen
+        name='news' 
         options={{
           title: 'News',
           headerShown: false,
           tabBarIcon: ({ color, focused }) => <TabIcon color={color} focused={focused} icon={icons.news as ImageProps} />
         }} />
-    </Tab.Navigator>
+    </Tabs>
   )
 }
 

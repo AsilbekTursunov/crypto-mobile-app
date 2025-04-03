@@ -49,7 +49,7 @@ const HomeScreen = () => {
               Hi
             </Text>
             <Text className='text-xl font-JakartaMedium text-neutral-300'>
-              {user.username} 👋
+              {user?.username} 👋
             </Text>
           </View>
           <View className='flex flex-row gap-5'>
@@ -59,7 +59,7 @@ const HomeScreen = () => {
               </TouchableOpacity>
             </View>
             <Link href={'/profile'} className=' flex items-center justify-center rounded-full'>
-              <Image src={user.image} className='size-10 border border-bgPrimary relative block  rounded-full p-2' />
+              <Image src={user?.image} className='size-10 border border-bgPrimary relative block  rounded-full p-2' />
             </Link>
           </View>
         </View>

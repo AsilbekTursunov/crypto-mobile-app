@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API } from '@/constants';
 import { useUserStore } from '@/store';
 import ScreenLoader from '@/components/Load';
-
+import { enableLegacyWebImplementation } from 'react-native-gesture-handler';
+enableLegacyWebImplementation(true);
 const MainPage = () => { 
   const { setUserData } = useUserStore()
 
@@ -16,7 +17,7 @@ const MainPage = () => {
       // console.log(token);
 
       if (!token) {
-        router.push("/(auth)/welcome"); // 🔴 Redirect ishlaydi 
+        router.push("/auth/welcome"); // 🔴 Redirect ishlaydi 
       }
       try {
         const response = await fetch(`${API}/refresh`, {
@@ -30,13 +31,13 @@ const MainPage = () => {
           const data = await response.json();
           await AsyncStorage.setItem("token", data.token);
           setUserData(data.user);
-          router.push("/(tabs)/home"); // 🔴 Redirect ishlaydi
+          router.push("/tabs/home"); // 🔴 Redirect ishlaydi
         } else {
-          router.push("/(auth)/welcome");
+          router.push("/auth/welcome");
         }
       } catch (error: any) {
         Alert.alert('Sign in error', error.message)
-        router.push("/(auth)/welcome");
+        router.push("/auth/welcome");
       }
     })();
   }, []);

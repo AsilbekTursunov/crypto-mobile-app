@@ -6,7 +6,7 @@ import { convertLocal, convertFixed, sliceText } from '@/lib/utils/token';
 
 const OrderCard = ({ order }: { order: CryptoData }) => { 
   return (
-    <TouchableOpacity onPress={() => router.push({ pathname: '/(coins)/[id]', params: { id: order?.id } })} className={`w-full flex flex-row items-center justify-between gap-1 mb-4 relative  border-b border-b-bgDark py-3`} >
+    <TouchableOpacity onPress={() => router.push({ pathname: '/coins/[id]', params: { id: order?.id } })} className={`w-full flex flex-row items-center justify-between gap-1 mb-4 relative  border-b border-b-bgDark py-3`} >
       <View className='flex flex-row gap-2'>
         <Image source={{ uri: order.image }} className='size-12 rounded-full  ' />
         <View className='flex flex-col gap-1'>

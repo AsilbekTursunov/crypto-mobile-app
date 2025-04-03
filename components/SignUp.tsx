@@ -6,6 +6,7 @@ import { useUserStore } from '@/store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
 import { API } from '@/constants'
+import { useMutation } from '@tanstack/react-query'
 const SignUp = () => {
   const [userName, setUserName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
@@ -14,29 +15,40 @@ const SignUp = () => {
   const { setUserData, user } = useUserStore()
   const ok = !userName && !email && !password
 
-  const handleSubmit = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch(`${API}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName, email, password }),
-      })
-      if (!response.ok) {
-        throw new Error('Failed to register')
+  const { mutate } = useMutation({
+    mutationKey: ['register'],
+    mutationFn: async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${API}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: userName, email, password }),
+        });
+
+        const data = await response.json(); // Har doim JSON formatni oling
+
+        if (!response.ok) {
+          console.log('Failed to register:', data);
+          throw new Error(data?.message || 'Failed to register');
+        }
+
+        // Foydalanuvchi ma'lumotlarini saqlash
+        setUserData(data.user);
+        await AsyncStorage.setItem('token', data.token);
+
+        // Navigatsiya qilish
+        router.push('/tabs/home');
+
+      } catch (error) {
+        console.error('Failed to register:', error);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json()
-      setUserData(data.user)
-      console.log(data);
-      await AsyncStorage.setItem('token', data.token)
-      setLoading(false)
-      router.push('/(tabs)/home')
-    } catch (error) {
-      setLoading(false)
-      console.error('Failed to sign up:', error)
-      alert('Failed to sign up. Please try again.')
     }
-  }
+  });
+
+
   return (
     <View className='flex flex-col gap-4 w-full'>
       <View className='flex flex-col w-full items-start gap-4 mb-4'>
@@ -61,7 +73,7 @@ const SignUp = () => {
           onChangeText={setPassword}
         />
       </View>
-      <TouchableOpacity disabled={ok} onPress={handleSubmit} className={`w-full  bg-bgPrimary rounded-xl py-3 ${ok ? 'opacity-30' : ''}`}>
+      <TouchableOpacity disabled={ok} onPress={() => mutate()} className={`w-full  bg-bgPrimary rounded-xl py-3 ${ok ? 'opacity-30' : ''}`}>
         {loading ? <>
           <ActivityIndicator size='large' color='white' />
         </> : <>
