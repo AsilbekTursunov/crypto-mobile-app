@@ -45,7 +45,7 @@ const Welcome = () => {
       </View>
 
       <TouchableOpacity
-        onPress={() => isLastSlide ? router.push("/(auth)/authorization") : swiperRef.current?.scrollBy(1)}
+        onPress={() => isLastSlide ? router.push("/auth/authorization") : swiperRef.current?.scrollBy(1)}
         className="w-fit mb-10 px-20 py-4 rounded-lg text-primary bg-bgPrimary"
       >
         <Text>{isLastSlide ? "Get Started" : "Next"}</Text>
