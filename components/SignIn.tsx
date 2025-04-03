@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import InputField from '@/components/InputField'
 import { useUserStore } from '@/store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { API } from '@/constants'
 import { useMutation } from '@tanstack/react-query'
 const SignIn = () => {
@@ -58,10 +58,7 @@ const SignIn = () => {
           secureTextEntry={true}
           onChangeText={setPassword}
         />
-      </View>
-      <TouchableOpacity className=' w-full text-start mb-10'>
-        <Text className='font-JakartaRegular text-bgPrimary  text-sm'>Forgot Password?</Text>
-      </TouchableOpacity>
+      </View> 
       <TouchableOpacity disabled={ok} onPress={() => mutate()} className={`w-full  bg-bgPrimary rounded-xl py-3 ${ok ? 'opacity-30' : ''}`}>
         {loading ? <>
           <ActivityIndicator size='large' color='white' />

@@ -60,3 +60,14 @@ export const useNewsStore = create<INewsStore>((set) => ({
   news: null,
   setNews: (data: NewArticle[] | null) => set({ news: data }),  //+
 }))
+
+
+interface ICode {
+  code: string | number | null,
+  setCode: (data: string | number | null) => void,  // update order data in the store.  //+
+}
+
+export const useCode = create<ICode>((set) => ({
+  code: null,
+  setCode: (data: string | number | null) => set({ code: data }),  //+
+}))
