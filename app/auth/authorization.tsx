@@ -3,9 +3,16 @@ import React, { useState } from 'react'
 import SignIn from '@/components/SignIn'
 import SignUp from '@/components/SignUp'
 import { StatusBar } from 'expo-status-bar'
+import { getNews } from '@/lib/actions/order'
 
 const Authorization = () => {
   const [type, setType] = useState<'sign-in' | 'sign-up'>('sign-in')
+  const getCoins = () => {
+    // const coins = await getNews()
+    // console.log(coins);
+
+  }
+  getCoins()
   return (
     <ScrollView className='w-full h-screen bg-bgDark flex-1 flex py-20  px-4'>
       <View className='bg-mainDark p-2 rounded-2xl w-full flex-row flex self-start gap-2 mb-32'>

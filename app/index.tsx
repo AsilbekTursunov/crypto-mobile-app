@@ -11,7 +11,8 @@ const MainPage = () => {
   const { setUserData } = useUserStore()
 
 
-  useEffect(() => {
+  useEffect(() => { 
+
     (async () => {
       const token = await AsyncStorage.getItem("token");
       // console.log(token);

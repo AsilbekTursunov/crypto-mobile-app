@@ -26,7 +26,7 @@ const ProfileScreen = () => {
   return (
     <View className='w-full h-screen bg-mainDark flex-1 flex relative flex-col'>
       <View className=' top-12 flex flex-row items-center  justify-between absolute w-full  z-50'>
-        <Link href={'/tabs/home'} className=' rounded-full ml-4 p-3'><Ionicons name="arrow-back" size={24} color="#5ED5A8" /></Link>
+        <TouchableOpacity onPress={() => router.back()} className=' rounded-full ml-4 p-3'><Ionicons name="arrow-back" size={24} color="#5ED5A8" /></TouchableOpacity>
       </View>
       <View className='h-[200px] w-full relative'>
         <LinearGradient
@@ -54,8 +54,8 @@ const ProfileScreen = () => {
           <Text className='text-textGray text-lg font-JakartaLight'>{moment(user?.createdAt).format('LL')}</Text>
         </View>
       </View>
-      <View className='flex-1 justify-end items-center px-5'>
-        <TouchableOpacity onPress={logOut} className='flex flex-row items-center justify-center gap-2 mb-4 bg-bgDark w-full py-4 rounded-xl '>
+      <View className='flex-1 justify-end items-center px-5 mb-5'>
+        <TouchableOpacity onPress={logOut} className='flex flex-row items-center justify-center gap-2 mb-4 bg-cyan-950/30 w-full py-4 rounded-xl '>
           <Text className='text-white text-lg font-medium'>Log out</Text>
           <Ionicons name="log-out-outline" size={24} color="#5ED5A8" />
         </TouchableOpacity>

@@ -12,7 +12,7 @@ module.exports = {
         darkBlue: "#404d3b", 
         primary: '#171D22', // main dark blue
         bgPrimary: '#5ED5A8', // main green 
-        bgDark: '#1B232A', // secondary dark blue
+        bgDark: '#13191f', // secondary dark blue
         mainDark: '#192027',
         textGray: '#777777', // text gray
         textRed: '#DD4B4B', // text red

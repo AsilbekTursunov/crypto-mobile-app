@@ -1,45 +1,57 @@
 import { View, Text, RefreshControl, Image, ImageProps, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, FlatList, ActivityIndicator } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
+import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { useOrderStore, useUserStore } from '@/store'
+import { useCoinStore, useOrderStore, useUserStore } from '@/store'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { Coin, CryptoData } from '@/types'
-import { fetchCoins } from '@/lib/actions/order'
 import icons from '@/constants/icons'
 import OrderCard from '@/components/OrderCard'
 import Loader from '@/components/Loader'
 import { Link } from 'expo-router'
+import axios from 'axios'
+import useGetCoins from '@/hooks/useGetCoins'
+import { fetchCoinGecko } from '@/lib/actions/order'
 
 const HomeScreen = () => {
-  // const { data, setData } = useOrderStore();
   const { user } = useUserStore()
+  const { data, refetch, fetchCoins, error, loading } = useGetCoins()
+  const { setCoins, coins } = useCoinStore()
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState<number>()
   const [refreshing, setRefreshing] = useState(false);
   const [open, setOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
 
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery({
-    queryKey: ["coins"],
-    queryFn: fetchCoins,
-    initialPageParam: 10,
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length ? allPages.length + 10 : undefined;
-    },
-  });
+  useEffect(() => {
+    const fetchCoinGecko = async () => {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=${1}`,
+        {
+          method: 'GET',
+          headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-mH4cERDndy92fwRYm2MsHqJv' },
+        }
+      ).then((res) => res.json()).then(data => {
+        console.log(data);
+
+      })
+    }
+    fetchCoinGecko()
+    // refetch(1)
+  }, [])
 
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refetch()
+    await refetch(1) 
     setRefreshing(false);
   }, []);
 
-  useEffect(() => {
-    refetch()
-  }, [])
-  const coins = data?.pages.flat() || [];
 
-  const filterData = searchTerm && coins?.filter((coin: CryptoData) => coin.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+
+
+  // const filterData = searchTerm && coins?.filter((coin: Coin) => coin.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
   return (
     <View className='flex flex-1 flex-col bg-mainDark'>
       <View className='w-full  pb-5  px-4 flex flex-row bg-bgDark  shadow shadow-mainDark justify-between items-center'>
@@ -70,20 +82,21 @@ const HomeScreen = () => {
             <TextInput
               onChangeText={(value) => setSearchTerm(value)}
               placeholder='Search crypto currencies'
+              keyboardType='default'
               className='border border-bgPrimary/10 w-full h-14 rounded-lg  px-4 placeholder:text-slate-700' />
           </TouchableWithoutFeedback>
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          data={(filterData ? filterData : coins)}
+          data={data}
           renderItem={({ item }) => <OrderCard key={item.name} order={item} />}
           keyExtractor={(item, index) => item.name || index.toLocaleString()}
           onEndReached={() => {
-            if (hasNextPage) fetchNextPage();
+
           }}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={isFetchingNextPage ? <ActivityIndicator size="large" color="blue" /> : null}
+          ListFooterComponent={refreshing ? <ActivityIndicator size="large" color="blue" /> : null}
         />
         <StatusBar style='light' />
       </View>

@@ -16,11 +16,11 @@ const TabsStackNavigater = () => {
       screenOptions={{
         tabBarActiveTintColor: "#5ED5A8",
         tabBarInactiveTintColor: "#3E4750",
-
+        tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#1B232A',
-          paddingTop: 10,
-          height: 64,
+          backgroundColor: '#13191f',
+          paddingTop: 15,
+          height: 75,
           borderTopWidth: 0,  
           paddingHorizontal: 10,
           paddingVertical: 10,
