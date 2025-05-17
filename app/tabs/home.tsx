@@ -61,7 +61,7 @@ const HomeScreen = () => {
               Hi
             </Text>
             <Text className='text-xl font-JakartaMedium text-neutral-300'>
-              {user?.username} 👋
+              {user?.username} 👋 wdaw
             </Text>
           </View>
           <View className='flex flex-row gap-5'>
@@ -86,7 +86,7 @@ const HomeScreen = () => {
               className='border border-bgPrimary/10 w-full h-14 rounded-lg  px-4 placeholder:text-slate-700' />
           </TouchableWithoutFeedback>
         </View>
-        <FlatList
+        {/* <FlatList
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           data={data}
@@ -97,7 +97,7 @@ const HomeScreen = () => {
           }}
           onEndReachedThreshold={0.5}
           ListFooterComponent={refreshing ? <ActivityIndicator size="large" color="blue" /> : null}
-        />
+        /> */}
         <StatusBar style='light' />
       </View>
     </View>

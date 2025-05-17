@@ -32,9 +32,9 @@ export const get100Coins = async () => {
 
 export const getCoinData = async (id: string) => {
   const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`, {
-    method: 'GET',
-    headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-G7Uhr5kaudo3ZCw8LWEit8Mj' }
-  });
+		method: 'GET',
+		headers: { accept: 'application/json', 'x-cg-demo-api-key': 'CG-mH4cERDndy92fwRYm2MsHqJv' },
+	})
   return response.json();
 };
 
